@@ -10,7 +10,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, Department } from "@prisma/client";
+import { Prisma, Department, Capability } from "@prisma/client";
 
 export class DepartmentServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +45,16 @@ export class DepartmentServiceBase {
     args: Prisma.SelectSubset<T, Prisma.DepartmentDeleteArgs>
   ): Promise<Department> {
     return this.prisma.department.delete(args);
+  }
+
+  async findCapability(
+    parentId: string,
+    args: Prisma.CapabilityFindManyArgs
+  ): Promise<Capability[]> {
+    return this.prisma.department
+      .findUnique({
+        where: { id: parentId },
+      })
+      .capability(args);
   }
 }

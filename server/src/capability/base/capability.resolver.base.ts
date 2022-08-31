@@ -19,32 +19,32 @@ import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateDepartmentArgs } from "./CreateDepartmentArgs";
-import { UpdateDepartmentArgs } from "./UpdateDepartmentArgs";
-import { DeleteDepartmentArgs } from "./DeleteDepartmentArgs";
-import { DepartmentFindManyArgs } from "./DepartmentFindManyArgs";
-import { DepartmentFindUniqueArgs } from "./DepartmentFindUniqueArgs";
-import { Department } from "./Department";
-import { CapabilityFindManyArgs } from "../../capability/base/CapabilityFindManyArgs";
-import { Capability } from "../../capability/base/Capability";
-import { DepartmentService } from "../department.service";
+import { CreateCapabilityArgs } from "./CreateCapabilityArgs";
+import { UpdateCapabilityArgs } from "./UpdateCapabilityArgs";
+import { DeleteCapabilityArgs } from "./DeleteCapabilityArgs";
+import { CapabilityFindManyArgs } from "./CapabilityFindManyArgs";
+import { CapabilityFindUniqueArgs } from "./CapabilityFindUniqueArgs";
+import { Capability } from "./Capability";
+import { DepartmentFindManyArgs } from "../../department/base/DepartmentFindManyArgs";
+import { Department } from "../../department/base/Department";
+import { CapabilityService } from "../capability.service";
 
-@graphql.Resolver(() => Department)
+@graphql.Resolver(() => Capability)
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
-export class DepartmentResolverBase {
+export class CapabilityResolverBase {
   constructor(
-    protected readonly service: DepartmentService,
+    protected readonly service: CapabilityService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
   @graphql.Query(() => MetaQueryPayload)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "read",
     possession: "any",
   })
-  async _departmentsMeta(
-    @graphql.Args() args: DepartmentFindManyArgs
+  async _capabilitiesMeta(
+    @graphql.Args() args: CapabilityFindManyArgs
   ): Promise<MetaQueryPayload> {
     const results = await this.service.count({
       ...args,
@@ -57,28 +57,28 @@ export class DepartmentResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => [Department])
+  @graphql.Query(() => [Capability])
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "read",
     possession: "any",
   })
-  async departments(
-    @graphql.Args() args: DepartmentFindManyArgs
-  ): Promise<Department[]> {
+  async capabilities(
+    @graphql.Args() args: CapabilityFindManyArgs
+  ): Promise<Capability[]> {
     return this.service.findMany(args);
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => Department, { nullable: true })
+  @graphql.Query(() => Capability, { nullable: true })
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "read",
     possession: "own",
   })
-  async department(
-    @graphql.Args() args: DepartmentFindUniqueArgs
-  ): Promise<Department | null> {
+  async capability(
+    @graphql.Args() args: CapabilityFindUniqueArgs
+  ): Promise<Capability | null> {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -87,15 +87,15 @@ export class DepartmentResolverBase {
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Department)
+  @graphql.Mutation(() => Capability)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "create",
     possession: "any",
   })
-  async createDepartment(
-    @graphql.Args() args: CreateDepartmentArgs
-  ): Promise<Department> {
+  async createCapability(
+    @graphql.Args() args: CreateCapabilityArgs
+  ): Promise<Capability> {
     return await this.service.create({
       ...args,
       data: args.data,
@@ -103,15 +103,15 @@ export class DepartmentResolverBase {
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Department)
+  @graphql.Mutation(() => Capability)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "update",
     possession: "any",
   })
-  async updateDepartment(
-    @graphql.Args() args: UpdateDepartmentArgs
-  ): Promise<Department | null> {
+  async updateCapability(
+    @graphql.Args() args: UpdateCapabilityArgs
+  ): Promise<Capability | null> {
     try {
       return await this.service.update({
         ...args,
@@ -127,15 +127,15 @@ export class DepartmentResolverBase {
     }
   }
 
-  @graphql.Mutation(() => Department)
+  @graphql.Mutation(() => Capability)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "delete",
     possession: "any",
   })
-  async deleteDepartment(
-    @graphql.Args() args: DeleteDepartmentArgs
-  ): Promise<Department | null> {
+  async deleteCapability(
+    @graphql.Args() args: DeleteCapabilityArgs
+  ): Promise<Capability | null> {
     try {
       return await this.service.delete(args);
     } catch (error) {
@@ -149,17 +149,17 @@ export class DepartmentResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Capability])
+  @graphql.ResolveField(() => [Department])
   @nestAccessControl.UseRoles({
-    resource: "Capability",
+    resource: "Department",
     action: "read",
     possession: "any",
   })
-  async capability(
-    @graphql.Parent() parent: Department,
-    @graphql.Args() args: CapabilityFindManyArgs
-  ): Promise<Capability[]> {
-    const results = await this.service.findCapability(parent.id, args);
+  async departments(
+    @graphql.Parent() parent: Capability,
+    @graphql.Args() args: DepartmentFindManyArgs
+  ): Promise<Department[]> {
+    const results = await this.service.findDepartments(parent.id, args);
 
     if (!results) {
       return [];

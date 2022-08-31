@@ -9,21 +9,21 @@ import {
   TextInput,
 } from "react-admin";
 
-import { CapabilityTitle } from "../capability/CapabilityTitle";
+import { DepartmentTitle } from "../department/DepartmentTitle";
 
-export const DepartmentEdit = (props: EditProps): React.ReactElement => {
+export const CapabilityEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
         <ReferenceArrayInput
-          source="capability"
-          reference="Capability"
+          source="departments"
+          reference="Department"
           parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
           format={(value: any) => value && value.map((v: any) => v.id)}
         >
-          <SelectArrayInput optionText={CapabilityTitle} />
+          <SelectArrayInput optionText={DepartmentTitle} />
         </ReferenceArrayInput>
-        <TextInput label="Title" source="title" />
+        <TextInput label="Name" source="name" />
       </SimpleForm>
     </Edit>
   );

@@ -11,22 +11,22 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { CapabilityCreateNestedManyWithoutDepartmentsInput } from "./CapabilityCreateNestedManyWithoutDepartmentsInput";
+import { DepartmentCreateNestedManyWithoutCapabilitiesInput } from "./DepartmentCreateNestedManyWithoutCapabilitiesInput";
 import { ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
 @InputType()
-class DepartmentCreateInput {
+class CapabilityCreateInput {
   @ApiProperty({
     required: false,
-    type: () => CapabilityCreateNestedManyWithoutDepartmentsInput,
+    type: () => DepartmentCreateNestedManyWithoutCapabilitiesInput,
   })
   @ValidateNested()
-  @Type(() => CapabilityCreateNestedManyWithoutDepartmentsInput)
+  @Type(() => DepartmentCreateNestedManyWithoutCapabilitiesInput)
   @IsOptional()
-  @Field(() => CapabilityCreateNestedManyWithoutDepartmentsInput, {
+  @Field(() => DepartmentCreateNestedManyWithoutCapabilitiesInput, {
     nullable: true,
   })
-  capability?: CapabilityCreateNestedManyWithoutDepartmentsInput;
+  departments?: DepartmentCreateNestedManyWithoutCapabilitiesInput;
 
   @ApiProperty({
     required: false,
@@ -37,6 +37,6 @@ class DepartmentCreateInput {
   @Field(() => String, {
     nullable: true,
   })
-  title?: string | null;
+  name?: string | null;
 }
-export { DepartmentCreateInput };
+export { CapabilityCreateInput };

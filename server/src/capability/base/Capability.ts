@@ -9,24 +9,37 @@ https://docs.amplication.com/docs/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-import { InputType, Field } from "@nestjs/graphql";
+import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { CapabilityCreateNestedManyWithoutDepartmentsInput } from "./CapabilityCreateNestedManyWithoutDepartmentsInput";
-import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { IsDate, ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
-@InputType()
-class DepartmentCreateInput {
+import { Department } from "../../department/base/Department";
+@ObjectType()
+class Capability {
+  @ApiProperty({
+    required: true,
+  })
+  @IsDate()
+  @Type(() => Date)
+  @Field(() => Date)
+  createdAt!: Date;
+
   @ApiProperty({
     required: false,
-    type: () => CapabilityCreateNestedManyWithoutDepartmentsInput,
+    type: () => [Department],
   })
   @ValidateNested()
-  @Type(() => CapabilityCreateNestedManyWithoutDepartmentsInput)
+  @Type(() => Department)
   @IsOptional()
-  @Field(() => CapabilityCreateNestedManyWithoutDepartmentsInput, {
-    nullable: true,
+  departments?: Array<Department>;
+
+  @ApiProperty({
+    required: true,
+    type: String,
   })
-  capability?: CapabilityCreateNestedManyWithoutDepartmentsInput;
+  @IsString()
+  @Field(() => String)
+  id!: string;
 
   @ApiProperty({
     required: false,
@@ -37,6 +50,14 @@ class DepartmentCreateInput {
   @Field(() => String, {
     nullable: true,
   })
-  title?: string | null;
+  name!: string | null;
+
+  @ApiProperty({
+    required: true,
+  })
+  @IsDate()
+  @Type(() => Date)
+  @Field(() => Date)
+  updatedAt!: Date;
 }
-export { DepartmentCreateInput };
+export { Capability };

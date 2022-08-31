@@ -13,6 +13,10 @@ import { DepartmentList } from "./department/DepartmentList";
 import { DepartmentCreate } from "./department/DepartmentCreate";
 import { DepartmentEdit } from "./department/DepartmentEdit";
 import { DepartmentShow } from "./department/DepartmentShow";
+import { CapabilityList } from "./capability/CapabilityList";
+import { CapabilityCreate } from "./capability/CapabilityCreate";
+import { CapabilityEdit } from "./capability/CapabilityEdit";
+import { CapabilityShow } from "./capability/CapabilityShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -52,6 +56,13 @@ const App = (): React.ReactElement => {
           edit={DepartmentEdit}
           create={DepartmentCreate}
           show={DepartmentShow}
+        />
+        <Resource
+          name="Capability"
+          list={CapabilityList}
+          edit={CapabilityEdit}
+          create={CapabilityCreate}
+          show={CapabilityShow}
         />
       </Admin>
     </div>
