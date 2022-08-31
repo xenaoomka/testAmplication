@@ -11,45 +11,46 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { CapabilityListRelationFilter } from "../../capability/base/CapabilityListRelationFilter";
+import { CapabilityWhereInput } from "./CapabilityWhereInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { StringFilter } from "../../util/StringFilter";
-import { StringNullableFilter } from "../../util/StringNullableFilter";
+
 @InputType()
-class DepartmentWhereInput {
+class CapabilityListRelationFilter {
   @ApiProperty({
     required: false,
-    type: () => CapabilityListRelationFilter,
+    type: () => CapabilityWhereInput,
   })
   @ValidateNested()
-  @Type(() => CapabilityListRelationFilter)
+  @Type(() => CapabilityWhereInput)
   @IsOptional()
-  @Field(() => CapabilityListRelationFilter, {
+  @Field(() => CapabilityWhereInput, {
     nullable: true,
   })
-  capability?: CapabilityListRelationFilter;
+  every?: CapabilityWhereInput;
 
   @ApiProperty({
     required: false,
-    type: StringFilter,
+    type: () => CapabilityWhereInput,
   })
-  @Type(() => StringFilter)
+  @ValidateNested()
+  @Type(() => CapabilityWhereInput)
   @IsOptional()
-  @Field(() => StringFilter, {
+  @Field(() => CapabilityWhereInput, {
     nullable: true,
   })
-  id?: StringFilter;
+  some?: CapabilityWhereInput;
 
   @ApiProperty({
     required: false,
-    type: StringNullableFilter,
+    type: () => CapabilityWhereInput,
   })
-  @Type(() => StringNullableFilter)
+  @ValidateNested()
+  @Type(() => CapabilityWhereInput)
   @IsOptional()
-  @Field(() => StringNullableFilter, {
+  @Field(() => CapabilityWhereInput, {
     nullable: true,
   })
-  title?: StringNullableFilter;
+  none?: CapabilityWhereInput;
 }
-export { DepartmentWhereInput };
+export { CapabilityListRelationFilter };

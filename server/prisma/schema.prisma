@@ -19,8 +19,17 @@ model User {
 }
 
 model Department {
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  title     String?
-  updatedAt DateTime @updatedAt
+  capability Capability[]
+  createdAt  DateTime     @default(now())
+  id         String       @id @default(cuid())
+  title      String?
+  updatedAt  DateTime     @updatedAt
+}
+
+model Capability {
+  createdAt   DateTime     @default(now())
+  departments Department[]
+  id          String       @id @default(cuid())
+  name        String?
+  updatedAt   DateTime     @updatedAt
 }

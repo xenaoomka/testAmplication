@@ -18,44 +18,44 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
-import { DepartmentService } from "../department.service";
+import { CapabilityService } from "../capability.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { DepartmentCreateInput } from "./DepartmentCreateInput";
-import { DepartmentWhereInput } from "./DepartmentWhereInput";
-import { DepartmentWhereUniqueInput } from "./DepartmentWhereUniqueInput";
-import { DepartmentFindManyArgs } from "./DepartmentFindManyArgs";
-import { DepartmentUpdateInput } from "./DepartmentUpdateInput";
-import { Department } from "./Department";
-import { CapabilityFindManyArgs } from "../../capability/base/CapabilityFindManyArgs";
-import { Capability } from "../../capability/base/Capability";
-import { CapabilityWhereUniqueInput } from "../../capability/base/CapabilityWhereUniqueInput";
+import { CapabilityCreateInput } from "./CapabilityCreateInput";
+import { CapabilityWhereInput } from "./CapabilityWhereInput";
+import { CapabilityWhereUniqueInput } from "./CapabilityWhereUniqueInput";
+import { CapabilityFindManyArgs } from "./CapabilityFindManyArgs";
+import { CapabilityUpdateInput } from "./CapabilityUpdateInput";
+import { Capability } from "./Capability";
+import { DepartmentFindManyArgs } from "../../department/base/DepartmentFindManyArgs";
+import { Department } from "../../department/base/Department";
+import { DepartmentWhereUniqueInput } from "../../department/base/DepartmentWhereUniqueInput";
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
-export class DepartmentControllerBase {
+export class CapabilityControllerBase {
   constructor(
-    protected readonly service: DepartmentService,
+    protected readonly service: CapabilityService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "create",
     possession: "any",
   })
   @common.Post()
-  @swagger.ApiCreatedResponse({ type: Department })
+  @swagger.ApiCreatedResponse({ type: Capability })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(
-    @common.Body() data: DepartmentCreateInput
-  ): Promise<Department> {
+    @common.Body() data: CapabilityCreateInput
+  ): Promise<Capability> {
     return await this.service.create({
       data: data,
       select: {
         createdAt: true,
         id: true,
-        title: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -63,22 +63,22 @@ export class DepartmentControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "read",
     possession: "any",
   })
   @common.Get()
-  @swagger.ApiOkResponse({ type: [Department] })
+  @swagger.ApiOkResponse({ type: [Capability] })
   @swagger.ApiForbiddenResponse()
-  @ApiNestedQuery(DepartmentFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Department[]> {
-    const args = plainToClass(DepartmentFindManyArgs, request.query);
+  @ApiNestedQuery(CapabilityFindManyArgs)
+  async findMany(@common.Req() request: Request): Promise<Capability[]> {
+    const args = plainToClass(CapabilityFindManyArgs, request.query);
     return this.service.findMany({
       ...args,
       select: {
         createdAt: true,
         id: true,
-        title: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -86,23 +86,23 @@ export class DepartmentControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "read",
     possession: "own",
   })
   @common.Get("/:id")
-  @swagger.ApiOkResponse({ type: Department })
+  @swagger.ApiOkResponse({ type: Capability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Param() params: DepartmentWhereUniqueInput
-  ): Promise<Department | null> {
+    @common.Param() params: CapabilityWhereUniqueInput
+  ): Promise<Capability | null> {
     const result = await this.service.findOne({
       where: params,
       select: {
         createdAt: true,
         id: true,
-        title: true,
+        name: true,
         updatedAt: true,
       },
     });
@@ -116,18 +116,18 @@ export class DepartmentControllerBase {
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "update",
     possession: "any",
   })
   @common.Patch("/:id")
-  @swagger.ApiOkResponse({ type: Department })
+  @swagger.ApiOkResponse({ type: Capability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
-    @common.Param() params: DepartmentWhereUniqueInput,
-    @common.Body() data: DepartmentUpdateInput
-  ): Promise<Department | null> {
+    @common.Param() params: CapabilityWhereUniqueInput,
+    @common.Body() data: CapabilityUpdateInput
+  ): Promise<Capability | null> {
     try {
       return await this.service.update({
         where: params,
@@ -135,7 +135,7 @@ export class DepartmentControllerBase {
         select: {
           createdAt: true,
           id: true,
-          title: true,
+          name: true,
           updatedAt: true,
         },
       });
@@ -150,24 +150,24 @@ export class DepartmentControllerBase {
   }
 
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "delete",
     possession: "any",
   })
   @common.Delete("/:id")
-  @swagger.ApiOkResponse({ type: Department })
+  @swagger.ApiOkResponse({ type: Capability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
-    @common.Param() params: DepartmentWhereUniqueInput
-  ): Promise<Department | null> {
+    @common.Param() params: CapabilityWhereUniqueInput
+  ): Promise<Capability | null> {
     try {
       return await this.service.delete({
         where: params,
         select: {
           createdAt: true,
           id: true,
-          title: true,
+          name: true,
           updatedAt: true,
         },
       });
@@ -183,23 +183,23 @@ export class DepartmentControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Capability",
+    resource: "Department",
     action: "read",
     possession: "any",
   })
-  @common.Get("/:id/capability")
-  @ApiNestedQuery(CapabilityFindManyArgs)
-  async findManyCapability(
+  @common.Get("/:id/departments")
+  @ApiNestedQuery(DepartmentFindManyArgs)
+  async findManyDepartments(
     @common.Req() request: Request,
-    @common.Param() params: DepartmentWhereUniqueInput
-  ): Promise<Capability[]> {
-    const query = plainToClass(CapabilityFindManyArgs, request.query);
-    const results = await this.service.findCapability(params.id, {
+    @common.Param() params: CapabilityWhereUniqueInput
+  ): Promise<Department[]> {
+    const query = plainToClass(DepartmentFindManyArgs, request.query);
+    const results = await this.service.findDepartments(params.id, {
       ...query,
       select: {
         createdAt: true,
         id: true,
-        name: true,
+        title: true,
         updatedAt: true,
       },
     });
@@ -212,17 +212,17 @@ export class DepartmentControllerBase {
   }
 
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "update",
     possession: "any",
   })
-  @common.Post("/:id/capability")
-  async connectCapability(
-    @common.Param() params: DepartmentWhereUniqueInput,
-    @common.Body() body: CapabilityWhereUniqueInput[]
+  @common.Post("/:id/departments")
+  async connectDepartments(
+    @common.Param() params: CapabilityWhereUniqueInput,
+    @common.Body() body: DepartmentWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      capability: {
+      departments: {
         connect: body,
       },
     };
@@ -234,17 +234,17 @@ export class DepartmentControllerBase {
   }
 
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "update",
     possession: "any",
   })
-  @common.Patch("/:id/capability")
-  async updateCapability(
-    @common.Param() params: DepartmentWhereUniqueInput,
-    @common.Body() body: CapabilityWhereUniqueInput[]
+  @common.Patch("/:id/departments")
+  async updateDepartments(
+    @common.Param() params: CapabilityWhereUniqueInput,
+    @common.Body() body: DepartmentWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      capability: {
+      departments: {
         set: body,
       },
     };
@@ -256,17 +256,17 @@ export class DepartmentControllerBase {
   }
 
   @nestAccessControl.UseRoles({
-    resource: "Department",
+    resource: "Capability",
     action: "update",
     possession: "any",
   })
-  @common.Delete("/:id/capability")
-  async disconnectCapability(
-    @common.Param() params: DepartmentWhereUniqueInput,
-    @common.Body() body: CapabilityWhereUniqueInput[]
+  @common.Delete("/:id/departments")
+  async disconnectDepartments(
+    @common.Param() params: CapabilityWhereUniqueInput,
+    @common.Body() body: DepartmentWhereUniqueInput[]
   ): Promise<void> {
     const data = {
-      capability: {
+      departments: {
         disconnect: body,
       },
     };
